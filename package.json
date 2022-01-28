@@ -1,11 +1,11 @@
 {
   "name": "copypaste",
   "private": true,
+  "version": "0.0.3",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
     "axios": "^0.24.0",
@@ -14,9 +14,12 @@
     "next": "12.0.4",
     "nprogress": "^0.2.0",
     "react": "17.0.2",
+    "react-contenteditable": "^3.3.6",
     "react-dom": "17.0.2",
     "sass": "^1.43.5",
     "serverless-mysql": "^1.5.4",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

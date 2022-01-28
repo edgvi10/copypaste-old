@@ -43,12 +43,12 @@ export default function Home() {
             <div className="row justify-content-center align-items-center">
                 <div className="col-12 col-sm-10 col-md-10 col-lg-8 col-xl-6">
                     <form onSubmit={handleFormSubmit} className="d-flex flex-column gap-3">
-                        <h1 className="text-center">Informe o nome da pasta que será compartilhada</h1>
                         <div className="input-group shadow-sm">
-                            <input type="search" name="slug" id="slug" placeholder="Nome da Pasta" className="form-control" onChange={handleInputChange} />
+                            <input type="search" name="slug" id="slug" placeholder="Repositório" className="form-control" onChange={handleInputChange} />
                             <button type="submit" className="btn btn-primary btn-sm fw-bold text-uppercase lh-100">{loading ? "Entrando..." : "Entrar"}</button>
                         </div>
-                        <button type="button" onClick={() => toggleTheme()} className="btn btn-outline-secondary mx-auto">Light/dark</button>
+
+                        <button type="button" onClick={() => toggleTheme()} className="btn btn-outline-secondary btn-sm me-auto">Light/Dark</button>
                     </form>
                 </div>
             </div>

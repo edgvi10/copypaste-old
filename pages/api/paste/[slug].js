@@ -3,12 +3,12 @@ import { base64 } from "@/root/src/libs/utils";
 import { v4 as uuidv4 } from "uuid";
 
 export default async (req, res) => {
-    console.clear();
+    // console.clear();
     const $return = {};
     $return.success = false;
     $return.message = null;
 
-    const db = new DB({ host: "db.edapp.com.br", user: "edgvi10", password: "!Dev2Eduardo", database: "playground" });
+    const db = new DB();
 
     if (req.method === "GET") {
         const select_publish_params = {};
@@ -27,6 +27,8 @@ export default async (req, res) => {
         const select_publish_sql = db.buildSelect(select_publish_params);
         const select_publish = await db.execute(select_publish_sql);
 
+        console.log(select_publish);
+
         if (select_publish.success) {
             $return.success = select_publish.success;
             const paste = select_publish.data[0];
@@ -43,6 +45,7 @@ export default async (req, res) => {
 
         return res.json($return);
     }
+
     if (req.method === "POST") {
         const folter_data = {
             uuid: uuidv4(),
