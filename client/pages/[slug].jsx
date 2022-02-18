@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import Api from '@/root/src/services/api';
 import NProgress from 'nprogress';
 import ContentEditable from 'react-contenteditable';
-const sockets = io("http://localhost:3001")
+const sockets = io("http://localhost:3000")
 
 export default function Home({ slug, ...props }) {
     const router = useRouter();
@@ -13,10 +13,18 @@ export default function Home({ slug, ...props }) {
     const [timeout_count, setTimeoutCount] = useState(0);
     
     useEffect(() => {
+        
+
         sockets.on("connection", socket => {
             console.log("socket connected -> ", socket.id);
-            socket.join(slug);
-            sockets.emit('copypaste', { slug, paste });
+        })
+
+        sockets.emit('join room', slug);
+
+        sockets.on("copypaste", socket => {
+            console.log(socket)
+            paste.content = socket
+            setPaste({...paste})
         })
 
     }, []);
@@ -34,7 +42,8 @@ export default function Home({ slug, ...props }) {
         clearTimeout(timeout_count);
         setTimeoutCount(setTimeout(() => {
             console.log('emitting')
-            sockets.emit('copypaste', { slug, paste });
+            sockets.emit('copypaste', [ slug, paste ]);
+            // getPasted()
         }, process.env.NEXT_PUBLIC_UPDATE_INTERVAL ?? 1000));
     };
 
