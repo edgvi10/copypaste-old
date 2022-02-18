@@ -15,18 +15,7 @@ export default function Home({ slug, ...props }) {
     const [paste, setPaste] = useState({});
     const [timeout_count, setTimeoutCount] = useState(0);
 
-    const socket = io(process.env.NEXT_PUBLIC_SOCKET_API_URL, { path: '/api/socket' });
-
     useEffect(() => {
-
-        socket.on('connect', () => {
-            console.log('Socket conectado');
-
-            socket.on('copypaste', data => {
-                console.log('Socket copypaste', data);
-            });
-            socket.on('disconnect', () => console.log('Socket desconectado'));
-        });
 
     }, []);
 
