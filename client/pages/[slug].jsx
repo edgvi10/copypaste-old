@@ -1,32 +1,31 @@
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client'
-
 import Head from 'next/head'
 import { useRouter } from 'next/router';
-
 import Api from '@/root/src/services/api';
-
 import NProgress from 'nprogress';
 import ContentEditable from 'react-contenteditable';
-
+const sockets = io("http://localhost:3000")
 
 export default function Home({ slug, ...props }) {
     const router = useRouter();
     const [paste, setPaste] = useState({});
     const [timeout_count, setTimeoutCount] = useState(0);
-
-    const socket = io(process.env.NEXT_PUBLIC_SOCKET_API_URL, { path: '/api/socket' });
-
+    
     useEffect(() => {
+        
 
-        socket.on('connect', () => {
-            console.log('Socket conectado');
+        sockets.on("connection", socket => {
+            console.log("socket connected -> ", socket.id);
+        })
 
-            socket.on('copypaste', data => {
-                console.log('Socket copypaste', data);
-            });
-            socket.on('disconnect', () => console.log('Socket desconectado'));
-        });
+        sockets.emit('join room', slug);
+
+        sockets.on("copypaste", socket => {
+            console.log(socket)
+            paste.content = socket
+            setPaste({...paste})
+        })
 
     }, []);
 
@@ -42,7 +41,9 @@ export default function Home({ slug, ...props }) {
 
         clearTimeout(timeout_count);
         setTimeoutCount(setTimeout(() => {
-            socket.emit('copypaste', paste);
+            console.log('emitting')
+            sockets.emit('copypaste', [ slug, paste ]);
+            // getPasted()
         }, process.env.NEXT_PUBLIC_UPDATE_INTERVAL ?? 1000));
     };
 
@@ -53,7 +54,7 @@ export default function Home({ slug, ...props }) {
         }).catch(err => {
             console.log(err);
         }).finally(() => {
-            // NProgress.done();
+            NProgress.done();
         });
     };
 
